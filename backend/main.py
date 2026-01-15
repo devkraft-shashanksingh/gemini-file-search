@@ -80,7 +80,7 @@ async def search(question: str = Form(...), file_search_store_id_param: str = Fo
 
     try:
         response = client.models.generate_content(
-            model="gemini-2.5-flash", # Use Flash for speed/cost
+            model="gemini-1.5-flash", # Use Flash for speed/cost
             contents=prompt,
             config=types.GenerateContentConfig(
                 tools=[
