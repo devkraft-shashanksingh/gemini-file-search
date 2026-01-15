@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini PPT Query</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Gemini PPT Assistant</h1>
+            <p>Upload a presentation and ask questions instantly.</p>
+        </header>
+
+        <main class="main-layout">
+            <div class="left-panel">
+                <section class="card ask-section disabled" id="askSection">
+                    <h2>2. Ask a Question</h2>
+                    <div class="input-group">
+                        <input type="text" id="questionInput" placeholder="What is the main topic of slide 3?">
+                        <button id="askBtn" class="primary-btn">Ask</button>
+                    </div>
+                    <div id="loading" class="loading hidden">Thinking...</div>
+                </section>
+
+                <section class="card results-section hidden" id="resultsSection">
+                    <h2>Answer</h2>
+                    <div id="answerContent" class="markdown-body"></div>
+
+                    <div class="citations">
+                        <h3>Sources</h3>
+                        <ul id="citationsList"></ul>
+                    </div>
+                </section>
+            </div>
+
+            <aside class="right-panel">
+                <section class="card upload-section">
+                    <h2>1. Upload PPT</h2>
+                    <div class="file-drop-area compact" id="dropArea">
+                        <span class="icon">📂</span>
+                        <span class="file-msg">Drag & Drop</span>
+                        <input type="file" id="fileInput" accept=".ppt,.pptx">
+                    </div>
+                    <button id="uploadBtn" class="primary-btn small-btn" disabled>Upload</button>
+                    <div id="uploadStatus" class="status-msg"></div>
+                </section>
+            </aside>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
