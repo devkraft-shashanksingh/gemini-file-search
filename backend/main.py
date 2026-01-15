@@ -28,11 +28,11 @@ client = genai.Client(api_key=GEMINI_API_KEY)
 
 file_search_store_id = os.getenv("FILE_SEARCH_STORE_ID")
 
-@app.post("/upload-ppt")
-async def upload_ppt(file: UploadFile = File(...)):
+@app.post("/upload-doc")
+async def upload_doc(file: UploadFile = File(...)):
     global file_search_store_id
     
-    file_path = f"temp_{file.filename}"
+    file_path = f"/tmp/temp_{file.filename}"
     with open(file_path, "wb") as f:
         f.write(await file.read())
 
@@ -51,7 +51,7 @@ async def upload_ppt(file: UploadFile = File(...)):
             time.sleep(2)
             operation = client.operations.get(operation)
 
-        return {"message": "PPT uploaded and indexed successfully", "store_id": file_search_store_id}
+        return {"message": "Document uploaded and indexed successfully", "store_id": file_search_store_id}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -59,8 +59,8 @@ async def upload_ppt(file: UploadFile = File(...)):
         if os.path.exists(file_path):
             os.remove(file_path)
 
-@app.post("/ask")
-async def ask_question(question: str = Form(...), file_search_store_id_param: str = Form(None)):
+@app.post("/search")
+async def search(question: str = Form(...), file_search_store_id_param: str = Form(None)):
     
     target_store_id = os.getenv("FILE_SEARCH_STORE_ID")
     
@@ -70,7 +70,7 @@ async def ask_question(question: str = Form(...), file_search_store_id_param: st
     if not target_store_id:
         raise HTTPException(status_code=400, detail="No Store ID available.")
 
-    prompt = f"{question}\n\nIMPORTANT: At the end of your answer, explicitly mention the 'Slide Number' and 'Slide Title' where this information was found."
+    prompt = question
 
     try:
         response = client.models.generate_content(

@@ -1,6 +1,6 @@
-const API_URL = 'http://localhost:8000';
-// Hardcoded Store ID default
-let currentStoreId = "fileSearchStores/storescae04512-imarheumsfib-u1zr7yaxuvz1";
+const API_URL = import.meta.env.VITE_API_BASE_URL || '';
+// Store ID from env
+let currentStoreId = import.meta.env.VITE_STORE_ID || "";
 
 const fileInput = document.getElementById('fileInput');
 const dropArea = document.getElementById('dropArea');
@@ -42,7 +42,7 @@ uploadBtn.addEventListener('click', async () => {
     uploadBtn.disabled = true;
 
     try {
-        const response = await fetch(`${API_URL}/upload-ppt`, {
+        const response = await fetch(`${API_URL}/upload-doc`, {
             method: 'POST',
             body: formData
         });
@@ -77,7 +77,7 @@ askBtn.addEventListener('click', async () => {
         formData.append('question', question);
         formData.append('file_search_store_id', currentStoreId);
 
-        const response = await fetch(`${API_URL}/ask`, {
+        const response = await fetch(`${API_URL}/search`, {
             method: 'POST',
             body: formData
         });
@@ -101,12 +101,25 @@ askBtn.addEventListener('click', async () => {
 
                 const title = document.createElement('div');
                 title.className = 'citation-title';
-                title.textContent = context.title || "Unknown Document";
+
+                // Find all matches for [Image X] or [Page X]
+                const pageMatches = context.text ? [...context.text.matchAll(/\[(Image|Page|Slide)\s+(\d+)\]/gi)] : [];
+
+                if (pageMatches.length > 0) {
+                    const pages = pageMatches.map(m => m[2]).join(', ');
+                    title.textContent = `Page no. ${pages}`;
+                } else {
+                    title.textContent = context.title || "Reference";
+                }
 
                 const text = document.createElement('div');
                 text.className = 'citation-text';
-                // Truncate text if too long for preview
-                text.textContent = context.text ? (context.text.substring(0, 150) + "...") : "No content";
+                // Show more text and don't truncate strictly if scrolling is enabled
+                let displayContent = context.text || "No content";
+                if (displayContent.length > 500) {
+                    displayContent = displayContent.substring(0, 500) + "...";
+                }
+                text.textContent = displayContent;
 
                 li.appendChild(title);
                 li.appendChild(text);

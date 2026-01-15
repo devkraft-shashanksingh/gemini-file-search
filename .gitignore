@@ -11,3 +11,4 @@ venv/
 
 # System
 .DS_Store
+/frontend/node_modules

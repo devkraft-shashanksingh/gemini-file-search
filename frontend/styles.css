@@ -294,9 +294,9 @@ h2 {
 .citation-text {
     color: var(--text);
     line-height: 1.4;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    /* Show max 4 lines */
-    -webkit-box-orient: vertical;
+    white-space: pre-wrap; /* Preserve formatting */
+    overflow-y: auto; /* Scroll if too long */
+    max-height: 200px;
+    font-family: monospace; /* Better for table alignment */
+    font-size: 0.8rem;
 }
