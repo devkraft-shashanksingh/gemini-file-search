@@ -6,8 +6,11 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '/upload-doc': 'http://localhost:8000',
-            '/search': 'http://localhost:8000',
+            '/api': {
+                target: 'http://localhost:8000',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/api/, '')
+            }
         }
     }
 })

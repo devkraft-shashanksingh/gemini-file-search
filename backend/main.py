@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-app = FastAPI()
+app = FastAPI(root_path="/api")
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", "*")
 
