@@ -11,13 +11,19 @@ load_dotenv()
 
 app = FastAPI()
 
+FRONTEND_URL = os.getenv("FRONTEND_URL", "*")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[FRONTEND_URL],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/api")
+def root():
+    return {"status": "backend ok", "frontend_allowed": FRONTEND_URL}
 
 # Setup Gemini Client
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
