@@ -11,11 +11,13 @@ load_dotenv()
 
 app = FastAPI()
 
-FRONTEND_URL = os.getenv("FRONTEND_URL", "*")
+# Handle CORS origins
+raw_origins = os.getenv("FRONTEND_URL", "*")
+origins_list = [origin.strip().rstrip("/") for origin in raw_origins.split(",") if origin.strip()]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_URL],
+    allow_origins=origins_list,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
