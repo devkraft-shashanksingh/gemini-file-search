@@ -14,20 +14,26 @@ app = FastAPI()
 # Handle CORS origins
 raw_origins = os.getenv("FRONTEND_URL", "*")
 if raw_origins == "*":
+    # IMPORTANT: If using wildcard "*", allow_credentials MUST be False
+    # Otherwise, browsers will block the request.
     origins_list = ["*"]
-    # If using wildcard, credentials must be False in many browsers
-    allow_all = True
+    allow_creds = False
 else:
+    # Set this in Vercel to: https://gemini-file-search-ui.vercel.app
     origins_list = [origin.strip().rstrip("/") for origin in raw_origins.split(",") if origin.strip()]
-    allow_all = False
+    allow_creds = True
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins_list if not allow_all else ["*"],
-    allow_credentials=not allow_all, # Wildcard + Credentials = Blocked by browsers
+    allow_origins=origins_list,
+    allow_credentials=allow_creds,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/")
+def home():
+    return {"status": "backend running", "cors_origins": origins_list}
 
 @app.get("/api")
 def root():
